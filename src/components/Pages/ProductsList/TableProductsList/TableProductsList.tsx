@@ -9,6 +9,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import Image from 'next/image'
+import Link from 'next/link'
+import DeleteProductButton from '../DeleteProductButton'
 import { useTableProductsList } from './TableProductsList.hook'
 
 const columnHelper = createColumnHelper<Product>()
@@ -58,8 +60,13 @@ const columns = [
     header: () => <div className='w-full min-w-[60px] text-center'>Action</div>,
     cell: (props) => (
       <div className='flex gap-2'>
-        <button className='border py-1 px-2'>Edit</button>
-        <button className='border py-1 px-2'>Delete</button>
+        <Link
+          className='border py-1 px-2'
+          href={`/products/${props.row.original.id}`}
+        >
+          Edit
+        </Link>
+        <DeleteProductButton productId={String(props.row.original.id)}>Delete</DeleteProductButton>
       </div>
     ),
   }),

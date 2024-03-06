@@ -1,6 +1,7 @@
 export interface GetProductsListParams {
   limit: number
   skip: number
+  enabled?: boolean
 }
 
 export interface ProductsListResponse {

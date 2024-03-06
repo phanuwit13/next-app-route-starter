@@ -1,22 +1,23 @@
 'use client'
 
-import { Guard } from '@/app/providers'
-import AuthProvider from '@/auth/AuthProvider'
-
-// is page check auth
-const authGuard = true //access only auth
-const guestGuard = false //access only guest
+import { useAuth } from '@/store/auth'
 
 export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const { logout } = useAuth()
+
   return (
-    <AuthProvider checkAuth={!guestGuard && authGuard}>
-      <Guard authGuard={authGuard} guestGuard={guestGuard}>
-        {children}
-      </Guard>
-    </AuthProvider>
+    <>
+      <nav className='flex justify-between items-center p-4 border-b'>
+        <div>NEXT.JS APP ROUTE</div>
+        <button onClick={() => logout()} className='border px-2 py-1'>
+          Logout
+        </button>
+      </nav>
+      {children}
+    </>
   )
 }

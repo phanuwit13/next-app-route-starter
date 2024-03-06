@@ -1,46 +1,85 @@
+import { ROUTE } from './routes'
+
+// permission
 const ROLE_PERMISSION = {
-  USER_PAGE: 'USER_PAGE',
-  USER_PAGE_CREATE: 'USER_PAGE_CREATE',
-  USER_PAGE_DELETE: 'USER_PAGE_DELETE',
-  USER_PAGE_EDIT: 'USER_PAGE_EDIT',
-  USER_CREATE_PAGE: 'USER_CREATE_PAGE',
-  USER_CREATE_PAGE_INSERT: 'USER_CREATE_PAGE_INSERT',
-  PLAN_PAGE: 'PLAN_PAGE',
-  PLAN_PAGE_CREATE: 'PLAN_PAGE_CREATE',
-  PLAN_PAGE_EDIT: 'PLAN_PAGE_EDIT',
-  PLAN_PAGE_DELETE: 'PLAN_PAGE_DELETE',
+  HOME: 'HOME',
+  PRODUCT_PAGE: 'PRODUCT_PAGE',
+  PRODUCT_PAGE_CREATE: 'PRODUCT_PAGE_CREATE',
+  PRODUCT_PAGE_UPDATE: 'PRODUCT_PAGE_UPDATE',
+  PRODUCT_PAGE_DELETE: 'PRODUCT_PAGE_DELETE',
+  PRODUCT_DETAIL_PAGE: 'PRODUCT_DETAIL_PAGE',
+  PRODUCT_DETAIL_PAGE_UPDATE: 'PRODUCT_DETAIL_PAGE_UPDATE',
+  PRODUCT_DETAIL_PAGE_DELETE: 'PRODUCT_DETAIL_PAGE_DELETE',
+  PRODUCT_CREATE_PAGE: 'PRODUCT_CREATE_PAGE',
 }
 
+// list การกำหนด permission
 const PERMISSION_MAP = [
   {
-    value: ROLE_PERMISSION.USER_PAGE,
-    label: 'การจัดการข้อมูลผู้ใช้',
+    value: ROLE_PERMISSION.HOME,
+    label: 'หน้าแรก',
+  },
+  {
+    value: ROLE_PERMISSION.PRODUCT_PAGE,
+    label: 'หน้าจัดการสินค้า',
     children: [
-      { value: ROLE_PERMISSION.USER_PAGE_CREATE, label: 'เพิ่มผู้ใช้งาน' },
-      { value: ROLE_PERMISSION.USER_PAGE_EDIT, label: 'แก้ไขผู้ใช้งาน' },
-      { value: ROLE_PERMISSION.USER_PAGE_DELETE, label: 'ลบผู้ใช้งาน' },
-      {
-        value: ROLE_PERMISSION.USER_CREATE_PAGE,
-        label: 'สร้างผู้ใช้งาน',
-        children: [
-          {
-            value: ROLE_PERMISSION.USER_CREATE_PAGE_INSERT,
-            label: 'เพิ่มผู้ใช้งาน',
-          },
-        ],
-      },
+      { value: ROLE_PERMISSION.PRODUCT_PAGE_CREATE, label: 'เพิ่มสินค้า' },
+      { value: ROLE_PERMISSION.PRODUCT_PAGE_DELETE, label: 'ลบสินค้า' },
+      { value: ROLE_PERMISSION.PRODUCT_PAGE_UPDATE, label: 'แก้ไขสินค้า' },
     ],
   },
   {
-    value: ROLE_PERMISSION.PLAN_PAGE,
-    label: 'จัดการแพลน',
+    value: ROLE_PERMISSION.PRODUCT_DETAIL_PAGE,
+    label: 'หน้าจัดการรายละเอียดสินค้า',
     children: [
-      { value: ROLE_PERMISSION.PLAN_PAGE_CREATE, label: 'เพิ่มแพลน' },
-      { value: ROLE_PERMISSION.PLAN_PAGE_EDIT, label: 'แก้ไขแพลน' },
-      { value: ROLE_PERMISSION.PLAN_PAGE_DELETE, label: 'ลบแพลน' },
+      {
+        value: ROLE_PERMISSION.PRODUCT_DETAIL_PAGE_UPDATE,
+        label: 'แก้ไขสินค้า',
+      },
+      { value: ROLE_PERMISSION.PRODUCT_DETAIL_PAGE_DELETE, label: 'ลบสินค้า' },
     ],
+  },
+  {
+    value: ROLE_PERMISSION.PRODUCT_CREATE_PAGE,
+    label: 'หน้าสร้างสินค้า',
   },
 ]
 
-export { PERMISSION_MAP, ROLE_PERMISSION }
+// permission ในการเข้าหน้า หรือ ปุ่มต่างๆ
+const ROUTE_PERMISSION = {
+  [ROUTE.LOGIN]: {
+    authGuard: false,
+    guestGuard: true,
+    permission: [],
+  },
+  [ROUTE.HOME]: {
+    authGuard: true,
+    guestGuard: false,
+    permission: [ROLE_PERMISSION.HOME],
+  },
+  [ROUTE.PRODUCTS]: {
+    authGuard: true,
+    guestGuard: false,
+    permission: [
+      ROLE_PERMISSION.PRODUCT_PAGE_CREATE,
+      ROLE_PERMISSION.PRODUCT_PAGE_DELETE,
+      ROLE_PERMISSION.PRODUCT_PAGE_UPDATE,
+    ],
+  },
+  [ROUTE.PRODUCTS_DETAIL]: {
+    authGuard: true,
+    guestGuard: false,
+    permission: [
+      ROLE_PERMISSION.PRODUCT_DETAIL_PAGE_UPDATE,
+      ROLE_PERMISSION.PRODUCT_DETAIL_PAGE_DELETE,
+    ],
+  },
+  [ROUTE.PRODUCTS_DETAIL]: {
+    authGuard: true,
+    guestGuard: false,
+    permission: [ROLE_PERMISSION.PRODUCT_CREATE_PAGE],
+  },
+}
+
+export { PERMISSION_MAP, ROLE_PERMISSION, ROUTE_PERMISSION }
 

@@ -1,3 +1,4 @@
+import { ROLE_PERMISSION } from '@/constants/permission'
 import { useLogin } from '@/services/auth/auth'
 import { useAuth } from '@/store/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -38,6 +39,32 @@ const useFormLogin = () => {
       { username: v.username, password: v.password },
       {
         onSuccess: ({ data }) => {
+          const permMock: { [key: string]: string[] } = {
+            atuny0: [ROLE_PERMISSION.HOME],
+            hbingley1: [
+              ROLE_PERMISSION.PRODUCT_PAGE,
+              ROLE_PERMISSION.PRODUCT_PAGE_DELETE,
+              ROLE_PERMISSION.PRODUCT_PAGE_UPDATE,
+              ROLE_PERMISSION.PRODUCT_PAGE_CREATE,
+            ],
+            rshawe2: [
+              ROLE_PERMISSION.PRODUCT_DETAIL_PAGE,
+              ROLE_PERMISSION.PRODUCT_DETAIL_PAGE_DELETE,
+              ROLE_PERMISSION.PRODUCT_DETAIL_PAGE_UPDATE,
+            ],
+            kminchelle: [
+              ROLE_PERMISSION.HOME,
+              ROLE_PERMISSION.PRODUCT_PAGE,
+              ROLE_PERMISSION.PRODUCT_PAGE_CREATE,
+              ROLE_PERMISSION.PRODUCT_PAGE_DELETE,
+              ROLE_PERMISSION.PRODUCT_PAGE_UPDATE,
+              ROLE_PERMISSION.PRODUCT_CREATE_PAGE,
+              ROLE_PERMISSION.PRODUCT_DETAIL_PAGE,
+              ROLE_PERMISSION.PRODUCT_DETAIL_PAGE_DELETE,
+              ROLE_PERMISSION.PRODUCT_DETAIL_PAGE_UPDATE,
+            ],
+          }
+
           const user = {
             username: data.username,
             email: data.email,
@@ -45,7 +72,8 @@ const useFormLogin = () => {
             lastName: data.lastName,
             gender: data.gender,
             image: data.image,
-            permission: [],
+            // permission: data.permission,
+            permission: permMock[data.username],
           }
           login({
             user: user,

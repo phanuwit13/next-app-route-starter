@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+  
 
-First, run the development server:
+# NEXT.js App Route + Auth + Role Permission
+
+  
+
+โปรเจกต์ NEXT.js App Route + Auth + Role Permission เป็นโปรเจกต์ที่พัฒนาด้วย NEXT.js
+
+  
+
+## การเริ่มต้นใช้งาน
+
+  
+
+หลังจากที่คุณ clone หรือดาวน์โหลดโปรเจกต์นี้มาแล้ว คุณสามารถทำตามขั้นตอนด้านล่างเพื่อเริ่มต้นใช้งาน:
+
+  
+
+### การติดตั้ง Dependencies
+
+  
+
+ใช้คำสั่งด้านล่างเพื่อติดตั้ง dependencies ที่จำเป็น:
 
 ```bash
-npm run dev
+
+nmp  install
+
 # or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+yarn
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### การเริ่มต้นเซิร์ฟเวอร์สำหรับพัฒนา
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+  
 
-## Learn More
+เริ่มต้นเว็บเซิร์ฟเวอร์พร้อม hot-reload ด้วยคำสั่ง:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+nmp  run  dev
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+# or
 
-## Deploy on Vercel
+yarn  dev
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Username Password
+
+#### Home Role Permission
+```bash
+  "username": "atuny0",
+  "password": "9uQFF1Lh"
+```
+#### ProductList Role Permission
+```bash
+  "username": "hbingley1",
+  "password": "CQutx25i8r",
+```
+#### ProductDetail Role Permission
+```bash
+ "username": "rshawe2",
+ "password": "OWsTbMUgFc",
+```
+#### All Role Permission
+```bash
+ "username": "kminchelle",
+ "password": "0lelplR",
+```
+
+## การใช้งาน Libraries
+
+  
+
+โปรเจกต์นี้ใช้งาน libraries และเครื่องมือต่างๆ ดังนี้:
+
+  
+
+-  `react-hook-form` สำหรับการจัดการเรื่องของ form
+
+-  `@tanstack/react-query` และ `@tanstack/react-table` สำหรับการจัดการข้อมูลและตาราง
+
+-  `axios` สำหรับการทำ HTTP requests
+
+-  `dayjs` สำหรับการจัดการวันที่
+
+-  `zustand` สำหรับการจัดการ state management
+
+-  `eslint` และ `@typescript-eslint` สำหรับการตรวจสอบโค้ด

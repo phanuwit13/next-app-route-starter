@@ -3,6 +3,7 @@ import { apiClient } from '@/lib/api'
 import { deleteCookie, setCookie } from 'cookies-next'
 import dayjs from 'dayjs'
 import { create } from 'zustand'
+import { logger } from './log'
 
 type LoginData = {
   user: User
@@ -45,40 +46,45 @@ const setAuthCookie = (key: string, value: string, expires?: number) => {
   )
 }
 
-export const useAuth = create<UseAuth>()((set) => ({
-  ...initialState,
-  login: ({ token, redirectUri, remember, user }) => {
-    //set token to cookie
-    setAuthCookie(
-      AUTH_KEY.AUTH_CREDENTIAL,
-      token,
-      remember ? AUTH_KEY.AUTH_CREDENTIAL_EXPIRE : undefined
-    )
-    //set user to cookie
-    setAuthCookie(
-      AUTH_KEY.USER_CREDENTIAL,
-      JSON.stringify(user),
-      remember ? AUTH_KEY.AUTH_CREDENTIAL_EXPIRE : undefined
-    )
+export const useAuth = create<UseAuth>()(
+  logger(
+    (set) => ({
+      ...initialState,
+      login: ({ token, redirectUri, remember, user }) => {
+        //set token to cookie
+        setAuthCookie(
+          AUTH_KEY.AUTH_CREDENTIAL,
+          token,
+          remember ? AUTH_KEY.AUTH_CREDENTIAL_EXPIRE : undefined
+        )
+        //set user to cookie
+        setAuthCookie(
+          AUTH_KEY.USER_CREDENTIAL,
+          JSON.stringify(user),
+          remember ? AUTH_KEY.AUTH_CREDENTIAL_EXPIRE : undefined
+        )
 
-    // set token and user to store (zustand)
-    set({ user: user, loading: false, token: token })
+        // set token and user to store (zustand)
+        set({ user: user, loading: false, token: token })
 
-    //redirect path
-    if (redirectUri) {
-      window.location.href = redirectUri
-    }
-  },
-  logout: ({ redirectUri } = {}) => {
-    set({ user: null, token: null })
-    //delete cookie
-    deleteCookie(AUTH_KEY.AUTH_CREDENTIAL)
-    deleteCookie(AUTH_KEY.USER_CREDENTIAL)
-    //clear api config request 
-    apiClient.interceptors.request.clear()
-    window.location.href = redirectUri || '/login'
-  },
-  setLoading: (value) => {
-    set({ loading: value })
-  },
-}))
+        //redirect path
+        if (redirectUri) {
+          window.location.href = redirectUri
+        }
+      },
+      logout: ({ redirectUri } = {}) => {
+        set({ user: null, token: null })
+        //delete cookie
+        deleteCookie(AUTH_KEY.AUTH_CREDENTIAL)
+        deleteCookie(AUTH_KEY.USER_CREDENTIAL)
+        //clear api config request
+        apiClient.interceptors.request.clear()
+        window.location.href = redirectUri || '/login'
+      },
+      setLoading: (value) => {
+        set({ loading: value })
+      },
+    }),
+    'auth-store'
+  )
+)
