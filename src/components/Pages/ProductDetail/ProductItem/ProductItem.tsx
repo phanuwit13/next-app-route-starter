@@ -1,5 +1,6 @@
 'use client'
 
+import PermissionButton from '@/app/permissionButton'
 import Link from 'next/link'
 import { Controller } from 'react-hook-form'
 import { useProductItem } from './ProductItem.hook'
@@ -101,20 +102,48 @@ const ProductItem = ({ productId }: Props) => {
             />
           </div>
           <div className='col-span-2'>Images</div>
-          <div className='col-span-8'>
-            <input
-              type='text'
-              className='border-2 py-1 px-2'
-              {...form.filedImages}
-            />
+          <div className='col-span-8 flex gap-1 flex-col'>
+            {form.fieldImageArray.fields?.map((field, index) => (
+              <fieldset key={field.id} className='w-full flex gap-2'>
+                <input
+                  className='border-2 py-1 px-2 w-full'
+                  {...form.register(`images.${index}.value`)}
+                />
+                <button
+                  onClick={() => {
+                    form.fieldImageArray.remove(index)
+                  }}
+                  className='py-1 px-2 bg-red-500 text-white'
+                >
+                  delete
+                </button>
+              </fieldset>
+            ))}
+            <button
+              type='button'
+              className='border border-dashed py-1'
+              onClick={() => {
+                form.fieldImageArray.append({
+                  value: '',
+                })
+              }}
+            >
+              Add
+            </button>
           </div>
         </div>
-        <button
-          type='submit'
-          className='mt-8 border py-1 bg-green-500 text-white px-4'
+        <PermissionButton
+          permission={
+            productId ? 'PRODUCT_DETAIL_PAGE_DELETE' : 'PRODUCT_CREATE_PAGE'
+          }
         >
-          SAVE
-        </button>
+          <button
+            type='submit'
+            className='mt-8 border py-1 bg-green-500 text-white px-4'
+          >
+            SAVE
+          </button>
+        </PermissionButton>
         <Link
           href={'/products'}
           type='button'

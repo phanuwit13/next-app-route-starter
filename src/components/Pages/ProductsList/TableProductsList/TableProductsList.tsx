@@ -1,4 +1,5 @@
 'use client'
+import PermissionButton from '@/app/permissionButton'
 import Pagination from '@/components/Pagination'
 import TableLoading from '@/components/TableLoading'
 import { Product } from '@/services/products/products.type'
@@ -60,13 +61,19 @@ const columns = [
     header: () => <div className='w-full min-w-[60px] text-center'>Action</div>,
     cell: (props) => (
       <div className='flex gap-2'>
-        <Link
-          className='border py-1 px-2'
-          href={`/products/${props.row.original.id}`}
-        >
-          Edit
-        </Link>
-        <DeleteProductButton productId={String(props.row.original.id)}>Delete</DeleteProductButton>
+        <PermissionButton permission='PRODUCT_PAGE_UPDATE'>
+          <Link
+            className='border py-1 px-2'
+            href={`/products/${props.row.original.id}`}
+          >
+            Edit
+          </Link>
+        </PermissionButton>
+        <PermissionButton permission='PRODUCT_PAGE_DELETE'>
+          <DeleteProductButton productId={String(props.row.original.id)}>
+            Delete
+          </DeleteProductButton>
+        </PermissionButton>
       </div>
     ),
   }),

@@ -43,8 +43,8 @@ const useFormLogin = () => {
             atuny0: [ROLE_PERMISSION.HOME],
             hbingley1: [
               ROLE_PERMISSION.PRODUCT_PAGE,
-              ROLE_PERMISSION.PRODUCT_PAGE_DELETE,
-              ROLE_PERMISSION.PRODUCT_PAGE_UPDATE,
+              // ROLE_PERMISSION.PRODUCT_PAGE_DELETE,
+              // ROLE_PERMISSION.PRODUCT_PAGE_UPDATE,
               ROLE_PERMISSION.PRODUCT_PAGE_CREATE,
             ],
             rshawe2: [

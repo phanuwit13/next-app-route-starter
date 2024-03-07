@@ -7,53 +7,41 @@ import SpinnerPage from '@/components/SpinnerPage'
 import { ROUTE_PERMISSION } from '@/constants/permission'
 import { urlMatch } from '@/lib/route'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { NextPage } from 'next'
 import { usePathname } from 'next/navigation'
 import { ReactNode, useMemo } from 'react'
 import PermissionProvider from './permissionProvider'
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  authGuard?: boolean
-  guestGuard?: boolean
-}
-
 interface ProviderProps {
-  initialState?: Record<string, unknown>
   children: ReactNode
 }
 
 type GuardProps = {
-  authGuard: boolean
-  guestGuard: boolean
+  guard: Guard
   children: ReactNode
 }
 
 export const queryClient = new QueryClient()
 
-export const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
-  if (guestGuard) {
+export const Guard = ({ children, guard }: GuardProps) => {
+  if (guard === 'Guest')
     return <GuestGuard fallback={<SpinnerPage />}>{children}</GuestGuard>
-  } else if (!guestGuard && !authGuard) {
-    return <>{children}</>
-  } else {
-    return <AuthGuard fallback={<SpinnerPage />}>{children}</AuthGuard>
-  }
+  if (guard === 'All') return <>{children}</>
+
+  return <AuthGuard fallback={<SpinnerPage />}>{children}</AuthGuard>
 }
 
 export default function Providers({ children }: ProviderProps) {
   const pathname = usePathname()
 
-  const permission = useMemo(() => {
+  const permission: Permission = useMemo(() => {
     const keyPath = Object.keys(ROUTE_PERMISSION).find((item) => {
       return urlMatch(item, pathname.toString())
     })
-    console.log('keyPath',keyPath)
     if (keyPath) {
       return ROUTE_PERMISSION[keyPath]
     } else {
       return {
-        authGuard: false,
-        guestGuard: false,
+        guard: 'All',
         permission: [],
       }
     }
@@ -61,12 +49,11 @@ export default function Providers({ children }: ProviderProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider checkAuth={!permission.guestGuard && permission.authGuard}>
-        <Guard
-          authGuard={permission.authGuard}
-          guestGuard={permission.guestGuard}
-        >
-          <PermissionProvider permission={permission.permission}>{children}</PermissionProvider>
+      <AuthProvider checkAuth={permission.guard === 'Auth'}>
+        <Guard guard={permission.guard}>
+          <PermissionProvider permission={permission.permission}>
+            {children}
+          </PermissionProvider>
         </Guard>
       </AuthProvider>
     </QueryClientProvider>

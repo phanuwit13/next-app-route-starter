@@ -46,20 +46,17 @@ const PERMISSION_MAP = [
 ]
 
 // permission ในการเข้าหน้า หรือ ปุ่มต่างๆ
-const ROUTE_PERMISSION = {
+const ROUTE_PERMISSION: RolePermission = {
   [ROUTE.LOGIN]: {
-    authGuard: false,
-    guestGuard: true,
+    guard: 'Guest',
     permission: [],
   },
   [ROUTE.HOME]: {
-    authGuard: true,
-    guestGuard: false,
+    guard: 'Auth',
     permission: [ROLE_PERMISSION.HOME],
   },
   [ROUTE.PRODUCTS]: {
-    authGuard: true,
-    guestGuard: false,
+    guard: 'Auth',
     permission: [
       ROLE_PERMISSION.PRODUCT_PAGE_CREATE,
       ROLE_PERMISSION.PRODUCT_PAGE_DELETE,
@@ -67,16 +64,14 @@ const ROUTE_PERMISSION = {
     ],
   },
   [ROUTE.PRODUCTS_DETAIL]: {
-    authGuard: true,
-    guestGuard: false,
+    guard: 'Auth',
     permission: [
       ROLE_PERMISSION.PRODUCT_DETAIL_PAGE_UPDATE,
       ROLE_PERMISSION.PRODUCT_DETAIL_PAGE_DELETE,
     ],
   },
   [ROUTE.PRODUCTS_DETAIL]: {
-    authGuard: true,
-    guestGuard: false,
+    guard: 'Auth',
     permission: [ROLE_PERMISSION.PRODUCT_CREATE_PAGE],
   },
 }

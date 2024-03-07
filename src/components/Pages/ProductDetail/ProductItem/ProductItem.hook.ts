@@ -6,7 +6,7 @@ import {
 } from '@/services/products/products'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 const schemaFormProduct = z.object({
@@ -31,8 +31,10 @@ const schemaFormProduct = z.object({
     message: 'please enter Password',
   }),
   images: z.array(
-    z.string().trim().min(1, {
-      message: 'please enter Password',
+    z.object({
+      value: z.string().trim().min(1, {
+        message: 'please enter Password',
+      }),
     })
   ),
 })
@@ -51,19 +53,36 @@ const useProductItem = ({ id }: { id?: string }) => {
   const mutateUpdateProduct = usePutProduct()
   const router = useRouter()
 
-  const { register, control, reset, handleSubmit } =
-    useForm<SchemaFormProduct>()
+  const { register, control, reset, handleSubmit } = useForm<SchemaFormProduct>(
+    {
+      defaultValues: {
+        images: [],
+      },
+    }
+  )
+
+  const { fields, append, prepend, remove, move, insert } = useFieldArray({
+    control: control,
+    name: 'images',
+  })
 
   useEffect(() => {
     if (productsResponse?.data) {
-      reset(productsResponse.data)
+      reset({
+        ...productsResponse.data,
+        images: productsResponse.data.images.map((item) => {
+          return {
+            value: item,
+          }
+        }),
+      })
     }
   }, [productsResponse?.data, reset])
 
   const onSubmit = (v: SchemaFormProduct) => {
     const mutate = isCreate ? mutateCreateProduct : mutateUpdateProduct
-
-    mutate.mutateAsync(v, {
+    const formData = { ...v, images: v.images.map((item) => item.value) }
+    mutate.mutateAsync(formData, {
       onSuccess: () => {
         alert('save success')
         router.push('/products')
@@ -83,9 +102,17 @@ const useProductItem = ({ id }: { id?: string }) => {
     filedBrand: register('brand'),
     filedCategory: register('category'),
     filedThumbnail: register('thumbnail'),
-    filedImages: register('images'),
     control,
+    register,
     handleSubmit: handleSubmit(onSubmit),
+    fieldImageArray: {
+      fields,
+      append,
+      prepend,
+      remove,
+      move,
+      insert,
+    },
   }
 
   return { productsResponse, categoryResponse, form }
