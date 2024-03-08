@@ -1,6 +1,8 @@
 'use client'
 
+import Count from '@/components/Count'
 import { useAuth } from '@/store/auth'
+import { useCount } from '@/store/count'
 
 export default function AdminLayout({
   children,
@@ -8,7 +10,7 @@ export default function AdminLayout({
   children: React.ReactNode
 }>) {
   const { logout } = useAuth()
-
+  const { count, user } = useCount()
   return (
     <>
       <nav className='flex justify-between items-center p-4 border-b'>
@@ -17,6 +19,8 @@ export default function AdminLayout({
           Logout
         </button>
       </nav>
+      <div className='m-auto max-w-[400px] w-full text-[80px]'> {count} {user}</div>
+      <Count />
       {children}
     </>
   )

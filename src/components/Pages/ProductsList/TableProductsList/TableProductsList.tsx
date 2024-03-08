@@ -1,86 +1,17 @@
 'use client'
-import PermissionButton from '@/app/permissionButton'
+
 import Pagination from '@/components/Pagination'
 import TableLoading from '@/components/TableLoading'
-import { Product } from '@/services/products/products.type'
 import {
-  createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import Image from 'next/image'
-import Link from 'next/link'
-import DeleteProductButton from '../DeleteProductButton'
 import { useTableProductsList } from './TableProductsList.hook'
 
-const columnHelper = createColumnHelper<Product>()
-
-const columns = [
-  columnHelper.accessor('id', {
-    id: 'vmNo',
-    cell: (info) => info.getValue(),
-    header: () => <span>Product ID</span>,
-  }),
-  columnHelper.accessor('title', {
-    header: () => <span>Title</span>,
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor('brand', {
-    header: () => <span>Band</span>,
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor('category', {
-    header: () => <span>category</span>,
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor('price', {
-    header: () => <span>price</span>,
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor('stock', {
-    header: () => <span>stock</span>,
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor('thumbnail', {
-    header: () => <span>Image</span>,
-    cell: (info) => (
-      <div className='text-right'>
-        <Image
-          src={info.getValue()}
-          alt=''
-          width={500}
-          height={500}
-          className='w-12 h-12 object-cover'
-        />
-      </div>
-    ),
-  }),
-  columnHelper.display({
-    id: 'action',
-    header: () => <div className='w-full min-w-[60px] text-center'>Action</div>,
-    cell: (props) => (
-      <div className='flex gap-2'>
-        <PermissionButton permission='PRODUCT_PAGE_UPDATE'>
-          <Link
-            className='border py-1 px-2'
-            href={`/products/${props.row.original.id}`}
-          >
-            Edit
-          </Link>
-        </PermissionButton>
-        <PermissionButton permission='PRODUCT_PAGE_DELETE'>
-          <DeleteProductButton productId={String(props.row.original.id)}>
-            Delete
-          </DeleteProductButton>
-        </PermissionButton>
-      </div>
-    ),
-  }),
-]
-
 const TableProductsList = () => {
-  const { productsList, isLoading, limit, skip } = useTableProductsList()
+  const { productsList, isLoading, limit, skip, columns } =
+    useTableProductsList()
 
   const table = useReactTable({
     data: productsList?.data.products || [],

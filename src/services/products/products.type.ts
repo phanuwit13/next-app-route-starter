@@ -1,6 +1,8 @@
 export interface GetProductsListParams {
   limit: number
   skip: number
+  sortType?:string
+  sortBy?:string
   enabled?: boolean
 }
 

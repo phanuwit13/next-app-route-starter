@@ -9,13 +9,15 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 export const useGetProductsList = ({
   limit,
   skip,
+  sortType,
+  sortBy,
   enabled = true,
 }: GetProductsListParams) => {
   return useQuery({
-    queryKey: ['get-product-list', limit, skip],
+    queryKey: ['get-product-list', limit, skip,sortType,sortBy],
     queryFn: () =>
       apiClient.get<ProductsListResponse>(
-        `/products?limit=${limit}&skip=${skip}`
+        `/products?limit=${limit}&skip=${skip}&sortBy=${sortBy}&sortType=${sortType}`
       ),
     retry: 0,
     enabled,

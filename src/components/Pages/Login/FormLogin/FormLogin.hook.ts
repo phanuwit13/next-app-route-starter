@@ -64,7 +64,6 @@ const useFormLogin = () => {
               ROLE_PERMISSION.PRODUCT_DETAIL_PAGE_UPDATE,
             ],
           }
-
           const user = {
             username: data.username,
             email: data.email,
