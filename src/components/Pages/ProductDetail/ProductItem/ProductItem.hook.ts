@@ -4,6 +4,7 @@ import {
   usePostProduct,
   usePutProduct,
 } from '@/services/products/products'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
@@ -53,13 +54,18 @@ const useProductItem = ({ id }: { id?: string }) => {
   const mutateUpdateProduct = usePutProduct()
   const router = useRouter()
 
-  const { register, control, reset, handleSubmit } = useForm<SchemaFormProduct>(
-    {
-      defaultValues: {
-        images: [],
-      },
-    }
-  )
+  const {
+    register,
+    control,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SchemaFormProduct>({
+    resolver: zodResolver(schemaFormProduct),
+    defaultValues: {
+      images: [],
+    },
+  })
 
   const { fields, append, prepend, remove, move, insert } = useFieldArray({
     control: control,
@@ -119,4 +125,3 @@ const useProductItem = ({ id }: { id?: string }) => {
 }
 
 export { useProductItem }
-
